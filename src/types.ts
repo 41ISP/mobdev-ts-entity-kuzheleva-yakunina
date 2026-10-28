@@ -17,13 +17,15 @@ export interface IGame {
   description?: Description[]
   rating?: number
   price?: number
-  genre?: string
+  genre?: GameGenre
   releaseDate?: string
   createdAt: string
   updatedAt: string
   publishedAt: string
+  platforms: string[]
   cover?: IMedia
 }
+export type TGameInput = Omit<IGame, "id" | "documentId" | "cover" | "createdAt" | "updatedAt" | "publishedAt">
 
 export interface Description {
   type: string
@@ -44,4 +46,14 @@ export interface Pagination {
   pageSize: number
   pageCount: number
   total: number
+}
+
+export const  genres = ['rpg', 'shooter', 'strategy', 'indie', 'horror'] as const 
+ export type GameGenre = (typeof genres)[number]
+export const genres_labels:Record <GameGenre, string> = {
+  rpg: 'рпг',
+  shooter: 'сехшг',
+  strategy: 'ъхгохшкфю',
+  indie: "фщвф",
+  horror: "цтгтг" 
 }

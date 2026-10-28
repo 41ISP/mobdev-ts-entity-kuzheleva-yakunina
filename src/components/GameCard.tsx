@@ -1,32 +1,40 @@
 import { API_URL } from "../api";
 import type { IGame } from "../types";
-
+import {genres_labels} from "../types"
 interface IGameCard extends IGame {
 
 }
 
-export function GameCard({ id, title, description, rating, price, cover }: IGameCard) {
+export function GameCard({ id, title, description, rating, price, cover, releaseDate, platforms, genre }: IGameCard) {
     return (
         <article className="card">
             <div className="card__cover">
-                {cover && <img src={API_URL+cover.url} alt={cover.alternativeText} />}
-                {/*<span>Название</span>*/}
+                {cover ? (<img src={API_URL + cover.url} alt={cover.alternativeText} />
+                ) : (
+                    <span>{title[0]}</span>
+                )}
                 <b className="card__rating">{rating}</b>
             </div>
 
             <div className="card__body">
                 <h3>{title}</h3>
-                {/* <p className="card__meta">Жанр, год</p>*/}
+{genre && (
+                <p className="card__meta">{genres_labels[genre]}</p>
+)}
+                {releaseDate && (
+                    <p className="card__meta"> {new Date(releaseDate).getFullYear()}</p>
+                )}
                 {description && (<p className="card__desc">{description[0].children[0].text}</p>)}
-                <p className="card__platforms">Платформы</p>
+                {platforms && (<p className="card__platforms">{platforms.join("/")}</p>
+                )}
             </div>
 
             <footer className="card__footer">
                 {price && (
                     <strong className={`${price === 0 ? 'free' : ""}`}>
-                        {price === 0 ? "Бесплатненько" : price}
+                        {price === 0 ? "Бесплатненько" : price} P
                     </strong>
-    )}
+                )}
                 <button className="link-btn">Удалить</button>
             </footer>
         </article>
