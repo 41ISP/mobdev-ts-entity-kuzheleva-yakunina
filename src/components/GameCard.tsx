@@ -1,11 +1,18 @@
-import { API_URL } from "../api";
+import { api, API_URL } from "../api";
+import { useGamesStore } from "../store/useGamesStore";
 import type { IGame } from "../types";
-import {genres_labels} from "../types"
+import { genres_labels } from "../types"
 interface IGameCard extends IGame {
 
 }
 
-export function GameCard({ id, title, description, rating, price, cover, releaseDate, platforms, genre }: IGameCard) {
+export function GameCard({ id, title, description, rating, price, cover, releaseDate, platforms, genre, documentId }: IGameCard) {
+    const { getGames } = useGamesStore()
+    const handleDelete = async () => {
+        await api.deleteGAme(documentId)
+        getGames()
+    }
+
     return (
         <article className="card">
             <div className="card__cover">
@@ -18,9 +25,9 @@ export function GameCard({ id, title, description, rating, price, cover, release
 
             <div className="card__body">
                 <h3>{title}</h3>
-{genre && (
-                <p className="card__meta">{genres_labels[genre]}</p>
-)}
+                {genre && (
+                    <p className="card__meta">{genres_labels[genre]}</p>
+                )}
                 {releaseDate && (
                     <p className="card__meta"> {new Date(releaseDate).getFullYear()}</p>
                 )}
@@ -35,7 +42,7 @@ export function GameCard({ id, title, description, rating, price, cover, release
                         {price === 0 ? "Бесплатненько" : price} P
                     </strong>
                 )}
-                <button className="link-btn">Удалить</button>
+                <button onClick={handleDelete} className="link-btn">Удалить</button>
             </footer>
         </article>
     )
